@@ -12,7 +12,7 @@ stages:
       - job: PrintMessage
         pool:
           name: Default
-          demands: mycap1
+          demands: mycap
         steps:
           - script: echo '****************'
           - script: echo 'starting with test'
