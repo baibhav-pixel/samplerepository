@@ -46,7 +46,7 @@ stages:
        - job: Test
          pool:
           name: Default
-          demands: mycap1
+          demands: mycap
         
          variables:
            solution: '**/*.sln'
