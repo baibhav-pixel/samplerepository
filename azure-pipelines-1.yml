@@ -1,0 +1,32 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- master
+
+pool:
+  name: Default
+  demands: mycap
+
+stages:
+  - stage: Welcome
+    jobs:
+      - job: PrintMessage
+        steps:
+          - script: echo 'Helloo Baibhav'
+      - job: AssignTask
+        steps:
+          - script: echo 'Different tasks are bulding, testing and packaging'
+  - stage: StartTask
+    jobs:
+      - job: Task1
+        steps:
+          - script: echo 'Task 1 started'
+  - stage: EndTask
+    jobs:
+      - job: Task2
+        steps:
+          - script: echo 'Task 1 ended'
+         
