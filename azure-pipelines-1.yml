@@ -6,27 +6,58 @@
 trigger:
 - master
 
-pool:
-  name: Default
-  demands: mycap
-
 stages:
-  - stage: Welcome
+  - stage: Build
     jobs:
       - job: PrintMessage
+        pool:
+          name: Default
+          demands: mycap1
         steps:
-          - script: echo 'Helloo Baibhav'
-      - job: AssignTask
+          - script: echo '****************'
+          - script: echo 'starting with test'
+          - script: echo '*****************'
+           
+      - job: Build
+        pool:
+         name: Default
+         demands: mycap
+
+        variables:
+           solution: '**/*.sln'
+           buildPlatform: 'Any CPU'
+           buildConfiguration: 'Release'
+ 
         steps:
-          - script: echo 'Different tasks are bulding, testing and packaging'
-  - stage: StartTask
+        - task:  NuGetToolInstaller@1
+        - task: NuGetCommand@2
+          inputs:
+            restoreSolution: '$(solution)'
+        - task: VSBuild@1
+          inputs:
+           solution: '$(solution)'
+           platform: '$(buildPlatform)'
+           configuration: '$(buildConfiguration)'
+
+        - script: echo 'Building application'
+        
+  - stage: Test
     jobs:
-      - job: Task1
-        steps:
-          - script: echo 'Task 1 started'
-  - stage: EndTask
-    jobs:
-      - job: Task2
-        steps:
-          - script: echo 'Task 1 ended'
+       - job: Test
+         pool:
+          name: Default
+          demands: mycap1
+        
+         variables:
+           solution: '**/*.sln'
+           buildPlatform: 'Any CPU'
+           buildConfiguration: 'Release'
+
+         steps:
+           - task: VSTest@2
+             inputs:
+              platform: '$(buildPlatform)'
+              configuration: '$(buildConfiguration)'
+           - script: echo 'Testing application'
+  
          
